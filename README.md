@@ -21,7 +21,7 @@ Before you begin, ensure you have met the following requirements:
 1. Clone the repository:
   `git clone https://github.com/marius-pieptea/TasquitoFe.git`
 2. Navigate to the project directory: 
-  `ng test`
+  `cd TasquitoFe`
 3. Install dependencies: 
   `npm install`
 
