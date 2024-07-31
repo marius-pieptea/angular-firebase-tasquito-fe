@@ -1,0 +1,66 @@
+<ng-container *ngIf="showReportIssue === false">
+  <button class="btn btn-primary" (click)="showReportIssue = true">Add issue</button>
+  <clr-datagrid *ngIf="issues$ | async as issues; else loading">
+    <clr-dg-column [clrDgField]="'issueNo'" [clrDgColType]="'number'">Issue Id</clr-dg-column>
+    <clr-dg-column [clrDgField]="'type'">Type</clr-dg-column>
+    <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
+    <clr-dg-column [clrDgField]="'description'">Description</clr-dg-column>
+    <clr-dg-column [clrDgField]="'priority'">Priority</clr-dg-column>
+    <clr-dg-column [clrDgField]="'completionDate'">Resolved</clr-dg-column>
+    <clr-dg-column>Actions</clr-dg-column>
+    <clr-dg-row *clrDgItems="let issue of issues">
+      <clr-dg-cell>{{issue.id}}</clr-dg-cell>
+      <clr-dg-cell>
+        <ng-container *ngIf="editedIssues[issue.id]; else typeDisplay">
+          <select [(ngModel)]="editedIssues[issue.id].type">
+            <option value="Feature">Feature</option>
+            <option value="Documentation">Documentation</option>
+            <option value="Bug">Bug</option>
+          </select>
+        </ng-container>
+        <ng-template #typeDisplay>{{issue.type}}</ng-template>
+      </clr-dg-cell>
+      <clr-dg-cell>
+        <ng-container *ngIf="editedIssues[issue.id]; else titleDisplay">
+          <input [(ngModel)]="editedIssues[issue.id].title" />
+        </ng-container>
+        <ng-template #titleDisplay>{{issue.title}}</ng-template>
+      </clr-dg-cell>
+      <clr-dg-cell>
+        <ng-container *ngIf="editedIssues[issue.id]; else descriptionDisplay">
+          <input [(ngModel)]="editedIssues[issue.id].description" />
+        </ng-container>
+        <ng-template #descriptionDisplay>{{issue.description}}</ng-template>
+      </clr-dg-cell>
+      <clr-dg-cell>
+        <ng-container *ngIf="editedIssues[issue.id]; else priorityDisplay">
+          <select [(ngModel)]="editedIssues[issue.id].priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </ng-container>
+        <ng-template #priorityDisplay>
+          <span class="label" [class.label-danger]="issue.priority === 'high'">{{issue.priority}}</span>
+        </ng-template>
+      </clr-dg-cell>
+      <clr-dg-cell>
+        {{ issue.completed ? (issue.completed | date:'short') : 'Not resolved' }}
+      </clr-dg-cell>
+      <clr-dg-cell>
+        <ng-container *ngIf="!editedIssues[issue.id]; else saveCancel">
+          <button class="btn btn-sm btn-link" (click)="onEdit(issue)">Edit</button>
+          <button class="btn btn-sm btn-link" (click)="onResolve(issue)">Resolve</button>
+        </ng-container>
+        <ng-template #saveCancel>
+          <button class="btn btn-sm btn-success" (click)="onSave(issue)">Save</button>
+          <button class="btn btn-sm btn-danger" (click)="onCancel(issue)">Cancel</button>
+        </ng-template>
+      </clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>{{issues.length}} issues</clr-dg-footer>
+  </clr-datagrid>
+  <ng-template #loading>
+    <p>Loading...</p>
+  </ng-template>
+</ng-container>

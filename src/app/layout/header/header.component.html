@@ -1,0 +1,15 @@
+<header>
+  <nav>
+    <ul>
+      <li *ngIf="!isAuthenticated">
+        <button (click)="onLogin()">Login</button>
+      </li>
+      <li *ngIf="!isAuthenticated">
+        <button (click)="onRegister()">Register</button>
+      </li>
+      <li *ngIf="isAuthenticated">
+        <button (click)="onLogout()">Logout</button>
+      </li>
+    </ul>
+  </nav>
+</header>
